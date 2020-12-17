@@ -11,9 +11,14 @@ app = Flask('Mart API')
 def getBarcode(image_string):
     image = Image.open(BytesIO(b64decode(image_string)))
     barcode_data = decode(image)
-    barcode_number = getattr(barcode_data[0], 'data')
-    print(barcode_number)
-    return barcode_number
+    # print(barcode_data)
+
+    if len(barcode_data):
+        barcode_number = getattr(barcode_data[0], 'data')
+        # print(barcode_number)
+        return barcode_number
+    else :
+        return 'No barcode found'
 
 
 @app.route('/api/barcode', methods=['POST'])
@@ -29,7 +34,7 @@ def barcode():
         #   return 'Okay daddy\n'
 
         barcodeImageString = request.form.get('barcode_encoded_image')
-        print('got image')
+        # print('got image')
         # print(barcodeImageString)
         barcode_number = getBarcode(barcodeImageString)
         return barcode_number
